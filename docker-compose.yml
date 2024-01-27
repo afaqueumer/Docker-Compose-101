@@ -1,0 +1,27 @@
+services:
+  streamlit-app:
+    build:
+      context: ./ui
+    ports:
+      - 8501:8501
+    depends_on:
+      - fastapi-server
+
+  fastapi-server:
+    build:
+      context: ./api
+    ports:
+      - 8000:8000
+    container_name: fastcontainer
+    volumes:
+      - ./data:/app/db
+    depends_on:
+      - mlflow-server
+
+  mlflow-server:
+    build:
+      context: ./mlflow_server
+    ports:
+      - 5000:5000
+    volumes:
+      - ./data:/app/db
